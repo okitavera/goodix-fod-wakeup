@@ -24,7 +24,7 @@ int send_input(uint16_t type, uint16_t code, uint16_t value)
 	int fd, ret = 1;
 	struct input_event ev;
 
-	fd = open(EVDEV, O_RDWR);
+	fd = open(EVDEV, O_RDWR | O_NONBLOCK);
 	if (fd < 0)
 		goto out;
 
@@ -92,7 +92,7 @@ int main()
 	printf("\nFODWakeup 1.0\n Copyright 2019, Nanda Oktavera\n");
 
 	printf(":: Reading %s\n", EVDEV);
-	fd = open(EVDEV, O_RDONLY);
+	fd = open(EVDEV, O_RDONLY | O_NONBLOCK);
 
 	while(read(fd, &ev, evsize)) {
 		if (ev.code == INP_OFF && ev.value == 1)
