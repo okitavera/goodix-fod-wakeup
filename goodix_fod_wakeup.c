@@ -77,23 +77,28 @@ void wakeup_nezuko()
 	send_input(EVDEV, EV_KEY, KEY_WAKEUP, 0);
 	send_input(EVDEV, EV_SYN, SYN_REPORT, 0);
 
-	if (readfint(BLDEV) == FB_BLANK_UNBLANK)
+	for(;;) {
+		usleep(DELAY);
+
+		if (readfint(BLDEV) != FB_BLANK_UNBLANK)
+			continue;
+
 		printf(":: Screen on.\n");
+		printf(":: Emulating touches\n");
 
-	printf(":: Emulating touches\n");
+		send_input(EVDEV, EV_KEY, BTN_TOUCH, 1);
+		send_input(EVDEV, EV_SYN, SYN_REPORT, 0);
 
-	send_input(EVDEV, EV_KEY, BTN_TOUCH, 1);
-	send_input(EVDEV, EV_SYN, SYN_REPORT, 0);
+		send_input(EVDEV, EV_ABS, ABS_MT_TRACKING_ID, 2060);
+		send_input(EVDEV, EV_SYN, SYN_REPORT, 0);
 
-	send_input(EVDEV, EV_ABS, ABS_MT_TRACKING_ID, 2060);
-	send_input(EVDEV, EV_SYN, SYN_REPORT, 0);
+		send_input(EVDEV, EV_KEY, BTN_TOUCH, 0);
+		send_input(EVDEV, EV_SYN, SYN_REPORT, 0);
 
-	send_input(EVDEV, EV_KEY, BTN_TOUCH, 0);
-	send_input(EVDEV, EV_SYN, SYN_REPORT, 0);
-
-	printf(":: Done\n");
+		printf(":: Done\n");
+		return;
+	}
 }
-
 
 int main()
 {
