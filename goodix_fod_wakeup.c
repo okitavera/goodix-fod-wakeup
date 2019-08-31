@@ -102,7 +102,7 @@ int main()
 	struct input_event ev;
 	size_t evsize = sizeof(struct input_event);
 
-	printf("\nFODWakeup 1.0\n Copyright 2019, Nanda Oktavera\n");
+	printf("\nFODWakeup 1.1\nCopyright 2019, Nanda Oktavera\n");
 
 	printf(":: Reading %s\n", EVDEV);
 	fd = open(EVDEV, O_RDONLY | O_NONBLOCK);
