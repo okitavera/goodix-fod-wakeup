@@ -33,6 +33,8 @@ int send_input(uint16_t type, uint16_t code, uint16_t value)
 	ev.value = value;
 
 	ret = write(fd, &ev, sizeof(struct input_event));
+	if (type == EV_SYN && code == SYN_REPORT)
+		usleep(DELAY);
 
 out:
 	close(fd);
@@ -72,8 +74,6 @@ void wakeup_nezuko()
 
 	send_input(EV_KEY, KEY_WAKEUP, 1);
 	send_input(EV_SYN, SYN_REPORT, 0);
-
-	usleep(DELAY);
 
 	send_input(EV_KEY, KEY_WAKEUP, 0);
 	send_input(EV_SYN, SYN_REPORT, 0);
