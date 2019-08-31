@@ -80,6 +80,19 @@ void wakeup_nezuko()
 
 	if (panel_status() == FB_BLANK_UNBLANK)
 		printf(":: Screen on.\n");
+
+	printf(":: Emulating touches\n");
+
+	send_input(EV_KEY, BTN_TOUCH, 1);
+	send_input(EV_SYN, SYN_REPORT, 0);
+
+	send_input(EV_ABS, ABS_MT_TRACKING_ID, 2060);
+	send_input(EV_SYN, SYN_REPORT, 0);
+
+	send_input(EV_KEY, BTN_TOUCH, 0);
+	send_input(EV_SYN, SYN_REPORT, 0);
+
+	printf(":: Done\n");
 }
 
 
