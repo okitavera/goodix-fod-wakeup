@@ -29,7 +29,7 @@
 #define dbg(fmt,...) do {} while (0)
 #endif
 
-	int send_input(char *input, uint16_t type, uint16_t code, uint16_t value)
+int send_input(char *input, uint16_t type, uint16_t code, uint16_t value)
 {
 	int fd, ret = 1;
 	struct input_event ev;
@@ -87,8 +87,6 @@ void wakeup_nezuko()
 	send_input(EVDEV, EV_SYN, SYN_REPORT, 0);
 
 	for(;;) {
-		usleep(DELAY);
-
 		if (readfint(BLDEV) != FB_BLANK_UNBLANK)
 			continue;
 
