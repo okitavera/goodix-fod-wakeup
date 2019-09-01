@@ -1,11 +1,14 @@
 /* SPDX-License-Identifier: BSD-3-Clause
  *
  * Goodix FOD Wakeup
+ * Tiny service for in-display fingerprint to do tap-to-wake-and-scan
  *
  * Copyright (c) 2019 Nanda Oktavera
  * Released under the terms of 3-clause BSD License
  *
  */
+
+//#define DEBUG
 
 #include <stdio.h>
 #include <string.h>
@@ -20,7 +23,13 @@
 #define INP_OFF 325 // when screen is off
 #define DELAY   10000
 
-int send_input(char *input, uint16_t type, uint16_t code, uint16_t value)
+#ifdef DEBUG
+#define dbg printf
+#else
+#define dbg(fmt,...) do {} while (0)
+#endif
+
+	int send_input(char *input, uint16_t type, uint16_t code, uint16_t value)
 {
 	int fd, ret = 1;
 	struct input_event ev;
@@ -69,7 +78,7 @@ void wakeup_nezuko()
 	if (readfint(BLDEV) <= FB_BLANK_NORMAL) // screen is already on
 		return;
 
-	printf(":: Wake-up the screen\n");
+	dbg(":: Wake-up the screen\n");
 
 	send_input(EVDEV, EV_KEY, KEY_WAKEUP, 1);
 	send_input(EVDEV, EV_SYN, SYN_REPORT, 0);
@@ -83,8 +92,8 @@ void wakeup_nezuko()
 		if (readfint(BLDEV) != FB_BLANK_UNBLANK)
 			continue;
 
-		printf(":: Screen on.\n");
-		printf(":: Emulating touches\n");
+		dbg(":: Screen on.\n");
+		dbg(":: Emulating touches\n");
 
 		send_input(EVDEV, EV_KEY, BTN_TOUCH, 1);
 		send_input(EVDEV, EV_SYN, SYN_REPORT, 0);
@@ -95,7 +104,7 @@ void wakeup_nezuko()
 		send_input(EVDEV, EV_KEY, BTN_TOUCH, 0);
 		send_input(EVDEV, EV_SYN, SYN_REPORT, 0);
 
-		printf(":: Done\n");
+		dbg(":: Done\n");
 		return;
 	}
 }
@@ -106,9 +115,11 @@ int main()
 	struct input_event ev;
 	size_t evsize = sizeof(struct input_event);
 
-	printf("\nFODWakeup 1.1\nCopyright 2019, Nanda Oktavera\n");
+	dbg("FODWakeup 1.1\n");
+	dbg("Tiny service for in-display fingerprint to do tap-to-wake-and-scan\n");
+	dbg("Copyright 2019, Nanda Oktavera\n");
 
-	printf(":: Reading %s\n", EVDEV);
+	dbg(":: Reading %s\n", EVDEV);
 	fd = open(EVDEV, O_RDONLY | O_NONBLOCK);
 
 	while(read(fd, &ev, evsize)) {

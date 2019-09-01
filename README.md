@@ -1,2 +1,2 @@
 # goodix-fod-wakeup
-Simple daemon to wakeup screen with in-display fingerprint (goodix)
+Tiny service for in-display fingerprint to do tap-to-wake-and-scan
