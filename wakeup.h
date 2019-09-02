@@ -27,5 +27,5 @@
 int send_input(char *input, uint16_t type, uint16_t code, uint16_t value);
 int readfint(char *file);
 
-#define APP_VERSION "1.2"
+#define APP_VERSION "1.3"
 #endif
