@@ -46,7 +46,7 @@ static void wakeup_nezuko()
 
 int main()
 {
-	int fd;
+	int fd, rd;
 	struct input_event ev;
 	size_t evsize = sizeof(struct input_event);
 
@@ -61,12 +61,16 @@ int main()
 
 	dbg(":: Reading %s\n", EVDEV);
 	fd = open(EVDEV, O_RDONLY | O_NONBLOCK);
+	while((rd = read(fd, &ev, evsize))) {
+		if (rd == -1){
+			usleep(DELAY);
+			continue;
+		}
 
-	while(read(fd, &ev, evsize)) {
 		if (ev.code == INP_OFF && ev.value == 1)
 			wakeup_nezuko();
-
-		usleep(DELAY);
+		else
+			usleep(DELAY);
 	}
 
 	close(fd);
