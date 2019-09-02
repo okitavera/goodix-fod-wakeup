@@ -8,6 +8,8 @@
  *
  */
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <linux/fb.h>
@@ -57,6 +59,11 @@ int main()
 	dbg("FODWakeup %s\n", APP_VERSION);
 	dbg("Tiny service for in-display fingerprint to do tap-to-wake-and-scan\n");
 	dbg("Copyright 2019, Nanda Oktavera\n");
+
+	if (getuid() != 0){
+		printf("Permission denied, please run as root. exiting\n");
+		exit(1);
+	}
 
 	dbg(":: Reading %s\n", EVDEV);
 	fd = open(EVDEV, O_RDONLY | O_NONBLOCK);
