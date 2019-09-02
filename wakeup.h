@@ -15,7 +15,7 @@
 
 #define EVDEV   "/dev/input/event2" // goodix_ts input event path
 #define BLDEV   "/sys/class/backlight/panel0-backlight/bl_power"
-#define INP_OFF 325 // when screen is off
+#define INP_OFF 325 // when area is touched while screen is off
 #define DELAY   10000
 
 #ifdef DEBUG

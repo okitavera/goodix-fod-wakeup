@@ -9,7 +9,6 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <linux/fb.h>
@@ -22,10 +21,7 @@ static void wakeup_nezuko()
 		return;
 
 	dbg(":: Wake-up the screen\n");
-
 	send_input(EVDEV, EV_KEY, KEY_WAKEUP, 1);
-	send_input(EVDEV, EV_SYN, SYN_REPORT, 0);
-
 	send_input(EVDEV, EV_KEY, KEY_WAKEUP, 0);
 	send_input(EVDEV, EV_SYN, SYN_REPORT, 0);
 
@@ -37,8 +33,6 @@ static void wakeup_nezuko()
 		dbg(":: Emulating touches\n");
 
 		send_input(EVDEV, EV_KEY, BTN_TOUCH, 1);
-		send_input(EVDEV, EV_SYN, SYN_REPORT, 0);
-
 		send_input(EVDEV, EV_ABS, ABS_MT_TRACKING_ID, 2060);
 		send_input(EVDEV, EV_SYN, SYN_REPORT, 0);
 
@@ -52,7 +46,7 @@ static void wakeup_nezuko()
 
 int main()
 {
-	int fd, ret = 0;
+	int fd;
 	struct input_event ev;
 	size_t evsize = sizeof(struct input_event);
 
@@ -62,7 +56,7 @@ int main()
 
 	if (getuid() != 0){
 		printf("Permission denied, please run as root. exiting\n");
-		exit(1);
+		return 1;
 	}
 
 	dbg(":: Reading %s\n", EVDEV);
@@ -76,5 +70,5 @@ int main()
 	}
 
 	close(fd);
-	return ret;
+	return 0;
 }
