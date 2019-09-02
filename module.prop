@@ -1,0 +1,6 @@
+id=goodix-fod-wakeup
+name=Goodix FOD Wakeup
+version=1.2
+versionCode=3
+author=okitavera
+description=Tiny service for in-display fingerprint to do tap-to-wake-and-scan
